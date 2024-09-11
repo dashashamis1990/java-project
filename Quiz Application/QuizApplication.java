@@ -62,23 +62,27 @@ public class QuizApplication {
         questions = new ArrayList<>();
 
         int lineCount = 1;
-        while (scanner.hasNextLine()) {
-            String line = scanner.nextLine().trim();
-            lineCount++;
+        try {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine().trim();
+                lineCount++;
 
-            if (line.startsWith("Question:")) {
-                String questionText = extractContent(line);
-                String optionAText = extractContent(scanner.nextLine());
-                String optionBText = extractContent(scanner.nextLine());
-                String optionCText = extractContent(scanner.nextLine());
-                String optionDText = extractContent(scanner.nextLine());
-                String correctAnswer = extractContent(scanner.nextLine());
+                if (line.startsWith("Question:")) {
+                    String questionText = extractContent(line);
+                    String optionAText = extractContent(scanner.nextLine());
+                    String optionBText = extractContent(scanner.nextLine());
+                    String optionCText = extractContent(scanner.nextLine());
+                    String optionDText = extractContent(scanner.nextLine());
+                    String correctAnswer = extractContent(scanner.nextLine());
 
-                Question question = new Question(questionText, optionAText, optionBText, optionCText, optionDText, correctAnswer);
-                questions.add(question);
-            } else {
-                logger.warning("Invalid question format at line " + lineCount);
+                    Question question = new Question(questionText, optionAText, optionBText, optionCText, optionDText, correctAnswer);
+                    questions.add(question);
+                } else {
+                    logger.warning("Invalid question format at line " + lineCount);
+                }
             }
+        } finally {
+            scanner.close();
         }
     }
 
@@ -117,11 +121,16 @@ public class QuizApplication {
             }
         }
 
+        int totalQuestions = questions.size();
+        int correctAnswers = score / SCORE_PER_QUESTION;
+        int incorrectAnswers = totalQuestions - correctAnswers;
+        double percentageScore = (double) score / (totalQuestions * SCORE_PER_QUESTION) * 100;
+
         String summaryLog = "Quiz Summary:\n" +
-                "Total Questions: " + questions.size() + "\n" +
-                "Correct Answers: " + score / SCORE_PER_QUESTION + "\n" +
-                "Incorrect Answers: " + (questions.size() * SCORE_PER_QUESTION - score) / SCORE_PER_QUESTION + "\n" +
-                "Score: " + score + "%\n" +
+                "Total Questions: " + totalQuestions + "\n" +
+                "Correct Answers: " + correctAnswers + "\n" +
+                "Incorrect Answers: " + incorrectAnswers + "\n" +
+                "Score: " + percentageScore + "%\n" +
                 "Thank you for playing!";
 
         logger.info(summaryLog);
