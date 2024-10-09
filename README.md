@@ -18,3 +18,6 @@ If you have a simple, beginner-level Java project that you would like to add to 
 
 ## License
 This repository is licensed under the MIT License, which means that you can use, modify, and distribute the code for any purpose, commercial or non-commercial, as long as you give credit to the original author.
+
+
+Use file copilot/instructions.md for github copilot instructions.
